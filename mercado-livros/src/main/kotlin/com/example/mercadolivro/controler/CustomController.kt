@@ -1,35 +1,53 @@
 package com.example.mercadolivro.controler
 
+import com.example.mercadolivro.extension.toCustomModel
 import com.example.mercadolivro.model.CustomerModel
 import com.example.mercadolivro.request.PostCustomerRequest
+import com.example.mercadolivro.request.PutCustomerRequest
+import com.example.mercadolivro.service.CustomService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-//as rotas boa pratica e sempre plural
+//as rotas boa pratica do Rest e sempre plural
 @RequestMapping("customers")
-class CustomController {
+class CustomController(
+    val customService: CustomService
+) {
 
-    val customers =  mutableListOf<CustomerModel>()
+    //camada controller apenas executa os controller,quem fica com a logica e a camada service
 
     @GetMapping
-    fun customers(): MutableList<CustomerModel> {
-        return customers
+    //para pegar o request por parametro(?name=Beatri), uso RequestParam
+    fun customers(@RequestParam name: String?): List<CustomerModel> {
+        return customService.customers(name)
     }
 
     @PostMapping
     //alterei o http para o 201. Porque o http que retornava e o 200(generico). 201 especifico para criacao
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody customer: PostCustomerRequest) {
-        //no koltin a variavel consegue assumir o valor do if
-      val id = if(customers.isEmpty()){
-             1
-      }else{
-          //primeiro preciso verificar se estava vazio. Last()  pega o valor anterior adicionado,mas caso for vazio retorna exception.
-          //Então trato se esta vazio e depois somo
-          customers.last().id.toInt() + 1
-      }.toString()
-        customers.add(CustomerModel(id,customer.email,customer.name))
+        customService.create(customer.toCustomModel())
+    }
+
+    //para pegar um valor dinâmico utilizo o uso do {‘id’}
+    @GetMapping("/{id}")
+    fun getId(@PathVariable id: String): CustomerModel {
+        return customService.getId(id)
+    }
+
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun update(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
+        customService.update(customer.toCustomModel(id))
+
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: String) {
+        customService.delete(id)
     }
 
 }
