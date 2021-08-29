@@ -21,6 +21,7 @@ data class BooksModel (
     @Enumerated(EnumType.STRING)
     var status: EnumBooks? = null,
 
+    //um usuario pode ter muitos livros
     @ManyToOne
     @JoinColumn(name="customer_id")
     var customer: CustomerModel? = null
