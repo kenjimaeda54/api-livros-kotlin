@@ -18,7 +18,7 @@ class CustomController(
     //camada controller apenas executa os controller,quem fica com a logica e a camada service
 
     @GetMapping
-    //para pegar o request por parametro(?name=Beatri), uso RequestParam
+    //para pegar o request por parametro(?name=Beatriz), uso RequestParam
     fun customers(@RequestParam name: String?): List<CustomerModel> {
         return customService.customers(name)
     }
@@ -32,21 +32,21 @@ class CustomController(
 
     //para pegar um valor dinâmico utilizo o uso do {‘id’}
     @GetMapping("/{id}")
-    fun getId(@PathVariable id: String): CustomerModel {
+    fun getId(@PathVariable id: Int): CustomerModel {
         return customService.getId(id)
     }
 
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
+    fun update(@PathVariable id: Int, @RequestBody customer: PutCustomerRequest) {
         customService.update(customer.toCustomModel(id))
 
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: String) {
+    fun delete(@PathVariable id: Int) {
         customService.delete(id)
     }
 
