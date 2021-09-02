@@ -9,6 +9,7 @@ import com.example.mercadolivro.service.BookService
 import com.example.mercadolivro.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 //as rotas boa pratica do Rest e sempre plural
@@ -29,7 +30,7 @@ class CustomController(
     @PostMapping
     //alterei o http para o 201. Porque o http que retornava e o 200(generico). 201 especifico para criacao
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody customer: PostCustomerRequest) {
+    fun create(@RequestBody @Valid customer: PostCustomerRequest) {
         customerService.create(customer.toCustomModel())
     }
 
@@ -42,7 +43,7 @@ class CustomController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody customer: PutCustomerRequest) {
+    fun update(@PathVariable id: Int, @RequestBody @Valid customer: PutCustomerRequest) {
         val customerService = getId(id)
         this.customerService.update(customer.toCustomModel(customerService))
 

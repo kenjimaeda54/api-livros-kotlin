@@ -1,6 +1,8 @@
 package com.example.mercadolivro.model
 
 import com.example.mercadolivro.enum.EnumBooks
+import com.example.mercadolivro.enum.Erros
+import com.example.mercadolivro.exception.BadRequestException
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -32,7 +34,7 @@ data class BooksModel(
     var status: EnumBooks? = null
         set(value) {
             if (field == EnumBooks.DELETADO || field == EnumBooks.CANCELADO)
-                throw Exception("Nao e possível alterar o estado de um campo $field")
+                throw BadRequestException(Erros.ML_1002.message.format(field), Erros.ML_1002.code)
             field = value
         }
     //value e o valor que sera alterado

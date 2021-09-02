@@ -1,6 +1,7 @@
 package com.example.mercadolivro.service
 
 import com.example.mercadolivro.enum.EnumCustomer
+import com.example.mercadolivro.enum.Erros
 import com.example.mercadolivro.exception.NotFoundException
 import com.example.mercadolivro.model.CustomerModel
 import org.springframework.stereotype.Service
@@ -21,7 +22,8 @@ class CustomerService(val repository: CustomRepository) {
     }
 
     fun getId(id: Int): CustomerModel {
-        return repository.findById(id).orElseThrow { NotFoundException("Don't exist customer [$id]", "Ml-0002") }
+        return repository.findById(id)
+            .orElseThrow { NotFoundException(Erros.ML_2000.message.format(id), Erros.ML_2000.code) }
     }
 
     fun update(customer: CustomerModel) {

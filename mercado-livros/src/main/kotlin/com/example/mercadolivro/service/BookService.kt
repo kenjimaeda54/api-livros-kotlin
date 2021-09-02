@@ -2,6 +2,7 @@ package com.example.mercadolivro.service
 
 import com.example.mercadolivro.controler.customerResponse.CustomerResponse
 import com.example.mercadolivro.enum.EnumBooks
+import com.example.mercadolivro.enum.Erros
 import com.example.mercadolivro.exception.NotFoundException
 import com.example.mercadolivro.model.BooksModel
 import com.example.mercadolivro.reposytory.BookRepository
@@ -24,7 +25,8 @@ class BookService(val repository: BookRepository) {
 
     fun getId(id: Int): BooksModel {
         //erro interno ML-0001 e para controle interno,por exemplo se eu documentar isto e possivel rastrear este erro
-        return repository.findById(id).orElseThrow { NotFoundException("Don't exist book [$id]", "Ml-0001") }
+        return repository.findById(id)
+            .orElseThrow { NotFoundException(Erros.ML_1001.message.format(id), Erros.ML_1001.code) }
     }
 
     fun delete(id: Int) {
