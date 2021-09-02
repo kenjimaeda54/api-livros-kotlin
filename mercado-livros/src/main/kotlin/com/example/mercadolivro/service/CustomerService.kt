@@ -1,16 +1,18 @@
 package com.example.mercadolivro.service
 
+import com.example.mercadolivro.enum.EnumCustomer
+import com.example.mercadolivro.exception.NotFoundException
 import com.example.mercadolivro.model.CustomerModel
 import org.springframework.stereotype.Service
 import com.example.mercadolivro.reposytory.CustomRepository
 
 @Service
-class CustomService(val repository: CustomRepository) {
+class CustomerService(val repository: CustomRepository) {
 
 
     //camada service nao pode ter request
     fun customers(name: String?): List<CustomerModel> {
-        name?.let {  return repository.findByNameContaining(it) }
+        name?.let { return repository.findByNameContaining(it) }
         return repository.findAll().toList()
     }
 
@@ -19,7 +21,7 @@ class CustomService(val repository: CustomRepository) {
     }
 
     fun getId(id: Int): CustomerModel {
-        return repository.findById(id).orElseThrow()
+        return repository.findById(id).orElseThrow { NotFoundException("Don't exist customer [$id]", "Ml-0002") }
     }
 
     fun update(customer: CustomerModel) {
@@ -32,9 +34,9 @@ class CustomService(val repository: CustomRepository) {
     }
 
     fun delete(id: Int) {
-        if (!repository.existsById(id)) {
-            return throw Exception()
-        }
-        repository.deleteById(id)
+        val customer = getId(id)
+        customer.status = EnumCustomer.INATIVO
+        repository.save(customer)
+
     }
 }

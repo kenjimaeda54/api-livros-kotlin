@@ -2,7 +2,7 @@ package com.example.mercadolivro.enum
 
 enum class EnumBooks {
     Ativo,
-    Vendido,
+    VENDIDO,
     CANCELADO,
     DELETADO
 

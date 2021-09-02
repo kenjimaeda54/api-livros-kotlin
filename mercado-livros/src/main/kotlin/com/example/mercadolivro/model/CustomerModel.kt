@@ -1,5 +1,6 @@
 package com.example.mercadolivro.model
 
+import com.example.mercadolivro.enum.EnumCustomer
 import javax.persistence.*
 
 //mesmo nome da tabela
@@ -16,5 +17,9 @@ data class CustomerModel(
 
     //ja que a minha tabela tem mesmo campo que a minha variável nao preciso especificar
     @Column
-    var name: String
+    var name: String,
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    var  status: EnumCustomer
 )
