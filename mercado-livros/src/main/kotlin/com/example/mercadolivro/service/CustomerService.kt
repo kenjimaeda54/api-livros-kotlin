@@ -27,7 +27,7 @@ class CustomerService(val repository: CustomRepository) {
     }
 
     fun update(customer: CustomerModel) {
-        //existByid e para verificar se existe id. Metodo usado para salvar e atulizar sao  iguais entao
+        //existByid e para verificar se existe id. Metodo usado para salvar e atualizar sao  iguais então
         //primeiro verifica se possui id,se existir eu salvo
         if (!repository.existsById(customer.id!!)) {
             return throw  Exception()
@@ -40,5 +40,13 @@ class CustomerService(val repository: CustomRepository) {
         customer.status = EnumCustomer.INATIVO
         repository.save(customer)
 
+    }
+
+    //se existir o email retorna true,então passo false para a funcao
+    fun validateEmail(email: String): Boolean {
+        //existsByEmail e uma query precisa ser o valor correto
+        //querys estão em like query jpa
+        //estou a dizer se email existe,retorna false
+        return  !repository.existsByEmail(email)
     }
 }
